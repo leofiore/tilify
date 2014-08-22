@@ -125,12 +125,16 @@ def guillotine_baf_las(box, rects=[]):
     rects.remove(best)
 
     if best.width > best.height:
-        left, right = box.fill_and_split_horizontal(best)
+        first, second = box.fill_and_split_horizontal(best)
     else:
-        left, right = box.fill_and_split_vertical(best)
+        first, second = box.fill_and_split_vertical(best)
 
-    guillotine_baf_las(left, rects)
-    guillotine_baf_las(right, rects)
+    if first.width * first.height > second.width * second.height:
+        guillotine_baf_las(first, rects)
+        guillotine_baf_las(second, rects)
+    else:
+        guillotine_baf_las(second, rects)
+        guillotine_baf_las(first, rects)
 
 
 def depth_composite(root, box, x, y, depth=0):
